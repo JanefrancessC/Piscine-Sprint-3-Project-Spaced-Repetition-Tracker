@@ -1,4 +1,4 @@
-import { getUserIds } from "./common.mjs";
+import { getUserIds, calculateRevisionDates } from "./common.mjs";
 
 const selectUser = document.getElementById("select-user");
 
@@ -13,4 +13,10 @@ const populateUserSelector = function () {
   });
 };
 
+selectUser.addEventListener("change", (e) => {
+  const selectedUser = e.target.value;
+  return selectedUser;
+});
+
 populateUserSelector();
+window.checkDates = calculateRevisionDates;
