@@ -13,4 +13,9 @@ const populateUserSelector = function () {
   });
 };
 
+selectUser.addEventListener("change", (e) => {
+   const selectedUser = e.target.value;
+   console.log(selectedUser);
+})
+
 populateUserSelector();
