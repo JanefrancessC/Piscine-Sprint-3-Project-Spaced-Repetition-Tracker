@@ -1,10 +1,13 @@
 import { getUserIds, calculateRevisionDates } from "./common.mjs";
-import { addData } from "../data/storage.mjs";
+import { addData, getData } from "../data/storage.mjs";
 
 const selectUser = document.getElementById("select-user");
 const formTopic = document.getElementById("topic-form");
 const topicInput = document.getElementById("revision-topic");
 const dateInput = document.getElementById("start-date");
+const agendaContainer = document.getElementById("agenda-container");
+const agendaList = document.getElementById("agenda-list");
+const agendaMsg = document.getElementById("agenda-msg");
 
 // DEFAULT DATE = TODAY
 const dateToday = () =>
@@ -21,10 +24,36 @@ const populateUserSelector = function () {
   });
 };
 
-// selectUser.addEventListener("change", (e) => {
-//   const selectedUser = e.target.value;
-//   return selectedUser;
-// });
+function renderAgenda(data) {
+  agendaList.innerHTML = "";
+  agendaMsg.textContent = "";
+
+  if (!data || data.length === 0) {
+    agendaMsg.textContent = `No revision agenda for this user!`;
+    return;
+  }
+
+  const sortedData = [...data].sort(
+    (a, b) => new Date(a.date) - new Date(b.date),
+  );
+
+  sortedData.forEach((item) => {
+    const li = document.createElement("li");
+    li.textContent = ` ${item.topic} - ${item.date}`;
+    agendaList.appendChild(li);
+  });
+
+  agendaContainer.appendChild(agendaList);
+}
+
+selectUser.addEventListener("change", (e) => {
+  const userId = e.target.value;
+
+  if (!userId) return;
+
+  const data = getData(userId);
+  renderAgenda(data);
+});
 
 formTopic.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -49,14 +78,13 @@ formTopic.addEventListener("submit", (e) => {
   });
 
   addData(userId, revisionData);
+  const updatedData = getData(userId);
+  renderAgenda(updatedData);
 
   formTopic.reset();
   selectUser.selectedIndex = 0;
   dateToday();
-
-  console.log(`New topics added ${topic} for User ${userId}`);
 });
 
 populateUserSelector();
 dateToday();
-window.checkDates = calculateRevisionDates;
