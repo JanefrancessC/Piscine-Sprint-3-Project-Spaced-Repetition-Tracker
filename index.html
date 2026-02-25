@@ -12,12 +12,14 @@
     </header>
     <main>
       <section id="user-container">
+        <h2>Choose User</h2>
         <label for="select-user">Select a user to view Agenda </label>
         <select id="select-user">
-          <option value="" disabled selected>--Select a User--</option>
+          <option value="" selected>--Select a User--</option>
         </select>
       </section>
       <section id="form-container">
+        <h2>Add New Topic</h2>
         <form id="topic-form">
           <label for="revision-topic">Topic:</label>
           <input
@@ -32,10 +34,10 @@
           <button type="submit">Submit</button>
         </form>
       </section>
-      <section id="agenda-container" aria-live="polite">
+      <section id="agenda-container">
         <h2>Revision Agenda</h2>
         <ul id="agenda-list"></ul>
-        <p id="agenda-msg"></p>
+        <p id="agenda-msg" aria-live="polite"></p>
       </section>
     </main>
   </body>

@@ -24,35 +24,42 @@ const populateUserSelector = function () {
   });
 };
 
-function renderAgenda(data) {
+function renderAgenda(data, userId) {
   agendaList.innerHTML = "";
   agendaMsg.textContent = "";
 
-  if (!data || data.length === 0) {
-    agendaMsg.textContent = `No revision agenda for this user!`;
+  if (!userId) return;
+
+  const today = new Date().toISOString().split("T")[0];
+  const upcomingRevisions = (data || []).filter((item) => item.date >= today);
+
+  if (upcomingRevisions.length === 0) {
+    agendaMsg.textContent = `No revision agenda for User ${userId}!`;
     return;
   }
 
-  const sortedData = [...data].sort(
+  const sortedData = [...upcomingRevisions].sort(
     (a, b) => new Date(a.date) - new Date(b.date),
   );
 
   sortedData.forEach((item) => {
     const li = document.createElement("li");
-    li.textContent = ` ${item.topic} - ${item.date}`;
+    li.textContent = ` ${item.topic}, ${item.date}`;
     agendaList.appendChild(li);
   });
-
-  agendaContainer.appendChild(agendaList);
 }
 
 selectUser.addEventListener("change", (e) => {
   const userId = e.target.value;
 
-  if (!userId) return;
+  if (!userId) {
+    agendaList.innerHTML = "";
+    agendaMsg.textContent = "";
+    return;
+  }
 
   const data = getData(userId);
-  renderAgenda(data);
+  renderAgenda(data, userId);
 });
 
 formTopic.addEventListener("submit", (e) => {
@@ -63,9 +70,11 @@ formTopic.addEventListener("submit", (e) => {
   const startDate = dateInput.value;
 
   if (!userId) {
-    alert("Select a user first!");
+    agendaMsg.textContent = `Please select a user to add an agenda!`;
     return;
   }
+
+  agendaMsg.textContent = "";
 
   if (!topic || !startDate) return;
 
@@ -79,10 +88,9 @@ formTopic.addEventListener("submit", (e) => {
 
   addData(userId, revisionData);
   const updatedData = getData(userId);
-  renderAgenda(updatedData);
+  renderAgenda(updatedData, userId);
 
   formTopic.reset();
-  selectUser.selectedIndex = 0;
   dateToday();
 });
 
