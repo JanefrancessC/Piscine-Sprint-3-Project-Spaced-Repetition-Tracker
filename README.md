@@ -31,7 +31,7 @@ A web-based application that helps students track learning topics using the **Sp
 
 1. Clone the repository:
    ```bash
-   git clone [https://github.com/JanefrancessC/Piscine-Sprint-3-Project-Spaced-Repetition-Tracker.git]
+   git clone https://github.com/JanefrancessC/Piscine-Sprint-3-Project-Spaced-Repetition-Tracker.git
    ```
 2. Navigate to the project folder:
    ```bash
