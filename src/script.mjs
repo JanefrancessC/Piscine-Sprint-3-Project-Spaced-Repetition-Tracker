@@ -38,8 +38,8 @@ function renderAgenda(data, userId) {
     return;
   }
 
-  const sortedData = [...upcomingRevisions].sort(
-    (a, b) => new Date(a.date) - new Date(b.date),
+  const sortedData = [...upcomingRevisions].sort((a, b) =>
+    a.date.localeCompare(b.date),
   );
 
   sortedData.forEach((item) => {
